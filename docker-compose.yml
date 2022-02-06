@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+    backend:
+      env_file: backend/.env
+      build: 
+        context: .
+        dockerfile: ./backend/Dockerfile
+        args:
+          USER_NAME: root
+          APP_PATH: /usr/src/voiceGather/backend
+      volumes:
+          - ./backend:/usr/src/voiceGather/backend
+      ports:
+          - 8000:8000
+      depends_on: 
+          - db
+
+    db:
+      # M1チップ対応のためplatform指定
+      platform: linux/x86_64
+      image: mongo:5.0
+      volumes:
+        - data:/data/db
+        - ./configdb:/data/configdb
+      ports:
+        - 27017:27017
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: root123A!
+
+    frontend:
+      env_file: frontend/.env
+      build: 
+        context: .
+        dockerfile: ./frontend/Dockerfile
+        args:
+          USER_NAME: root
+          APP_PATH: /usr/src/voiceGather/frontend
+      volumes:
+        - ./frontend:/usr/src/voiceGather/frontend
+      command: sh -c "cd voice-gather && yarn start"
+      tty: true
+      stdin_open: true
+      ports: 
+        - 3000:3000
+
+volumes:
+  data:
