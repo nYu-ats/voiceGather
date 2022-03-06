@@ -1,0 +1,27 @@
+questionnaire:
+  - title: 'とりがら'
+    overview: 'とりがら'
+    scope: 1
+  - title: '冬アニメ'
+    overview: '冬アニメ'
+    scope: 1
+  - title: 'カーリング'
+    overview: 'バルセロ展'
+    scope: 1
+  - title: '今日の晩飯'
+    overview: '今日の晩飯'
+    scope: 2
+  - title: '休日数'
+    overview: '休日数'
+    scope: 2
+
+category:
+  - name: 'ライフスタイル'
+  - name: '趣味'
+  - name: 'アニメ'
+  - name: 'その他'
+  - name: 'スポーツ'
+  - name: 'ファイナンス'
+  - name: '食事'
+  - name: '家電'
+  - name: '冬物'

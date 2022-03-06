@@ -4,12 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==4.0"
-djangorestframework = "*"
-django-filter = "*"
-tzdata = "*"
 typing-extensions = "*"
-pyyaml = "*"
 
 [dev-packages]
 

@@ -19,15 +19,20 @@ services:
     db:
       # M1チップ対応のためplatform指定
       platform: linux/x86_64
-      image: mongo:5.0
+      image: mysql:8.0
       volumes:
-        - data:/data/db
-        - ./configdb:/data/configdb
+        - data:/var/lib/mysql
+        - ./mysql_cnf/my.cnf:/etc/my.cnf
+        # mysqlサーバー起動時に下記フォルダ内のsqlを自動実行することで、アプリケーション用スキーマを事前に作成する
+        - ./initdb.d:/docker-entrypoint-initdb.d
       ports:
-        - 27017:27017
+        - 3306:3306
       environment:
-        MONGO_INITDB_ROOT_USERNAME: root
-        MONGO_INITDB_ROOT_PASSWORD: root123A!
+            - MYSQL_ROOT_PASSWORD=root123A!
+            - MYSQL_USER=django
+            - MYSQL_PASSWORD=django123A!
+      # docker-compose実行ユーザーに、volumesで指定したコンテナ内ディレクトリ操作権限を与える必要がある     
+      command: bash -c 'usermod -o -u $LINUX_MYSQL_UID mysql; groupmod -o -g $LINUX_MYSQL_GID mysql; chown -R mysql:root /var/run/mysqld/ /var/log/mysql/ /var/lib/mysql/; /entrypoint.sh mysqld --user=mysql --console'
 
     frontend:
       env_file: frontend/.env

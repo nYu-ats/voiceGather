@@ -37,6 +37,6 @@ RUN bash ~/.bash_profile
 RUN pyenv -v
 RUN pyenv install 3.8.2
 RUN pyenv global 3.8.2
-RUN mkdir -p /var/log/app/sharetech/
+RUN mkdir -p /var/log/app/voiceGather/
 
 ENTRYPOINT ["/usr/src/voiceGather/backend/entrypoint.sh"]
