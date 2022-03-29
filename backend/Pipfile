@@ -10,6 +10,9 @@ django-filter = "*"
 tzdata = "*"
 typing-extensions = "*"
 pyyaml = "*"
+pymysql = "*"
+cryptography = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

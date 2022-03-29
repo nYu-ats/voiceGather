@@ -42,13 +42,13 @@ class BaseTextBuilder:
 
 class TitleBuilder(BaseTextBuilder):
 
-    __pre_text_list = [
+    pre_text_list = [
         '',
         'これは',
         'どうも、',
         'よろしくお願いします。',
         ]
-    __post_text_list = [
+    post_text_list = [
         'についてのアンケート',
         'に関するアンケートです。',
         'に関する調査です',
@@ -58,14 +58,14 @@ class TitleBuilder(BaseTextBuilder):
 
 class OverviewBuilder(BaseTextBuilder):
 
-    __pre_text_list = [
+    pre_text_list = [
         '会社都合により',
         'とある理由から、',
         'どうもです。',
         'ご覧いただきありがとうございます。',
         '',
     ]
-    __post_text_list = [
+    post_text_list = [
         'について調査をしています。ご協力をお願いします。',
         'に関して聞いてみたいと思いまして。\nよろしくお願いします。',
         'ってどうですか？ちなみに私は結構好きです。',

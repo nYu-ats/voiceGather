@@ -3,6 +3,7 @@ from typing_extensions import final
 import yaml
 import random
 import datetime
+from pathlib import Path
 from questionnaire.models import *
 from .records import Records
 from .util.text_builder import Directer, TitleBuilder, OverviewBuilder
@@ -90,3 +91,8 @@ class TestData:
                     self.category_mapping_records.add(record)
         
         self.category_mapping_records.bulk_create()
+
+if __name__ == "__main__":
+    path = Path("./resource/test_data.yaml")
+    td = TestData(path)
+    td.create()
