@@ -11,6 +11,9 @@ services:
           APP_PATH: /usr/src/voiceGather/backend
       volumes:
           - ./backend:/usr/src/voiceGather/backend
+      command: /bin/bash
+      tty: true
+      stdin_open: true
       ports:
           - 8000:8000
       depends_on: 
@@ -21,6 +24,7 @@ services:
       platform: linux/x86_64
       image: mysql:8.0
       volumes:
+        - logs:/var/log/mysql
         - data:/var/lib/mysql
         - ./mysql_cnf/my.cnf:/etc/my.cnf
         # mysqlサーバー起動時に下記フォルダ内のsqlを自動実行することで、アプリケーション用スキーマを事前に作成する
@@ -31,8 +35,9 @@ services:
             - MYSQL_ROOT_PASSWORD=root123A!
             - MYSQL_USER=django
             - MYSQL_PASSWORD=django123A!
-      # docker-compose実行ユーザーに、volumesで指定したコンテナ内ディレクトリ操作権限を与える必要がある     
-      command: bash -c 'usermod -o -u $LINUX_MYSQL_UID mysql; groupmod -o -g $LINUX_MYSQL_GID mysql; chown -R mysql:root /var/run/mysqld/ /var/log/mysql/ /var/lib/mysql/; /entrypoint.sh mysqld --user=mysql --console'
+      # docker-compose実行ユーザーに、volumesで指定したコンテナ内ディレクトリ操作権限を与える必要がある
+      # command: bash -c 'usermod -o -u $LINUX_MYSQL_UID mysql; groupmod -o -g $LINUX_MYSQL_GID mysql; chown -R mysql:root /var/run/mysqld/ /var/log/mysql/ /var/lib/mysql/; /entrypoint.sh mysqld --user=mysql --console'
+      # command: bash -c 'mysqld --user=mysql --console'
 
     frontend:
       env_file: frontend/.env
@@ -47,8 +52,10 @@ services:
       command: sh -c "cd voice-gather && yarn start"
       tty: true
       stdin_open: true
+      mem_limit: 2g
       ports: 
         - 3000:3000
 
 volumes:
   data:
+  logs:
