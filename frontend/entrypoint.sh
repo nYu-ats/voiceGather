@@ -1,8 +1,9 @@
 #!/bin/sh
 
-if [ ! -d './voiceGather' ]; then
+if [ ! -e './voice-gather' ]; then
   echo "set up application..."
-  npm install -g create-react-app && create-react-app voice-gather
+  npm install -g create-react-app react-router-dom @material-ui/core@next @material-ui/icons@next axios \
+  && create-react-app voice-gather --template typescript
 else
   echo "already set up application"
 fi

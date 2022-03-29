@@ -7,6 +7,12 @@ name = "pypi"
 django = "==4.0"
 djangorestframework = "*"
 django-filter = "*"
+tzdata = "*"
+typing-extensions = "*"
+pyyaml = "*"
+pymysql = "*"
+cryptography = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 
