@@ -19,6 +19,10 @@ class Questionnaire(AppBaseModel):
         default = None,
         null = True,
         )
+    watched_count = models.PositiveIntegerField(
+        validators = [MinValueValidator(0), MaxValueValidator(10000000)],
+        default = 0,
+    )
     answer_count = models.PositiveIntegerField(
         validators = [MinValueValidator(0), MaxValueValidator(10000000)],
         default = 0,
