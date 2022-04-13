@@ -1,18 +1,23 @@
 questionnaire:
   - title: 'とりがら'
     overview: 'とりがら'
+    question: 'とりがら'    
     scope: 1
-  - title: '冬アニメ'
-    overview: '冬アニメ'
+  - title: 'パチンコ'
+    overview: 'パチンコ'
+    question: 'パチンコ'
     scope: 1
   - title: 'カーリング'
-    overview: 'バルセロ展'
+    overview: 'カーリング'
+    question: 'カーリング'
     scope: 1
   - title: '今日の晩飯'
     overview: '今日の晩飯'
+    question: '今日の晩飯'
     scope: 2
   - title: '休日数'
     overview: '休日数'
+    question: '休日数'
     scope: 2
 
 category:

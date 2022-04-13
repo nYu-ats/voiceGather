@@ -33,12 +33,12 @@ class QuestionnaireProxy(Questionnaire):
                 )
         
         start_date_condition = Q(
-            start_at__gte = parameter.get('start-date')
-        ) if parameter.get('start-date') else Q()
+            start_at__gte = parameter.get('startDate')
+        ) if parameter.get('startDate') else Q()
 
         end_date_condition = Q(
-            end_at_lte = parameter.get('end-date')
-        ) if parameter.get('end-date') else Q()
+            end_at_lte = parameter.get('endDate')
+        ) if parameter.get('endDate') else Q()
 
         answerable_condition = Q(
             end_at__gte = timezone.localdate()
@@ -53,12 +53,16 @@ class QuestionnaireProxy(Questionnaire):
         
         '''並べ替え条件のセット'''
         # order及びorder_byパラメータはascもしくはdescで必ず取得可能
-        if parameter.get('order') and parameter.get('order_by'):
-            order_by = '-' + parameter.get('order_by') \
-            if parameter.get('order') == 'desc' else parameter.get('order_by')
+        if parameter.get('order') and parameter.get('orderBy'):
+            order_by = '-' + parameter.get('orderBy') \
+            if parameter.get('order') == 'desc' else parameter.get('orderBy')
 
             query_set = query_set.order_by(order_by)
         
+        '''取得件数のセット'''
+        if parameter.get('upperLimit'):
+            query_set = query_set[:int(parameter.get('upperLimit'))]
+
         # CategoryMappingテーブルと結合
         # cattegory_mapping_queryset = CategoryMappingProxy.get_queryset(parameter.getlist('category[]'))
         # query_set = query_set.prefetch_related(

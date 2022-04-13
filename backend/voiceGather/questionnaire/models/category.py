@@ -3,7 +3,7 @@ from .app_base_model import AppBaseModel
 
 class Category(AppBaseModel):
     '''
-    カテゴリモデル
+    カテゴリマスタデータモデル
     '''
     class Meta:
         db_table = 'category'
