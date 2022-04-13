@@ -12,7 +12,6 @@ margin: auto 0;
 const navItemStyle = {
     width: 'auto',
     height: 'auto',
-    margin: '1em',
 }
 
 const navItemList = [
@@ -36,12 +35,14 @@ export const GlobalNav = () => {
         <StyledListContainer>
             {navItemList.map((item) => {
                 return (
-                <ListItem>
-                    <Link linkStyle={navItemStyle}>
-                        {item.name}
-                    </Link>
-                </ListItem>
-            )})}
+                    <div style={{margin:"0 1em"}}>
+                        <ListItem>
+                            <Link linkStyle={navItemStyle}>
+                                {item.name}
+                            </Link>
+                        </ListItem>
+                    </div>
+                )})}
         </StyledListContainer>
     )
 }

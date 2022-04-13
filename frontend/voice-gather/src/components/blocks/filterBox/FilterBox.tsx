@@ -15,7 +15,7 @@ export type Category = {
 
 export const FilterBox:VFC<CategoryArray> = (props) => {
     return (
-        <form style={{width: "20vw", height:"100vh", backgroundColor:"white", borderRadius:"4px"}}>
+        <form style={{width: "20vw", height:"100vh", backgroundColor:"white", borderRadius:"4px", position:"sticky", top:"100px", overflowY:"auto"}}>
             <div style={{width:"100%", padding:".5em"}}>
                 <SimpleButton label="Search"/>
             </div>

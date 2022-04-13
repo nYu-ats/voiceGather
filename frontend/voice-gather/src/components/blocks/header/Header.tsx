@@ -8,8 +8,12 @@ import Image from "../../../images/logo.png"
 
 const StyledHeader = styled.div`
 width: 100vw;
-height: auto;
+height: 85px;
 padding: 0;
+position: sticky;
+top:0;
+background-color:white;
+z-index:100;
 `
 
 export const Header = () => {
@@ -20,7 +24,7 @@ export const Header = () => {
                 <ImageLink 
                     imageSrc={Image} 
                     imageStyle={{width:"100px", height:"50px"}} 
-                    linkStyle={{width:"100px", height:"50px", margin:"0px"}}/>
+                    linkStyle={{width:"100px", height:"50px"}}/>
                 <GlobalNav/>
             </div>
             <div style={{borderTop:"2px solid #eaedf7", borderBottom:"2px solid #eaedf7"}}>
