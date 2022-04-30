@@ -19,6 +19,7 @@ export type QuestionnaireOverview={
     overview:string;
     startDate:string;
     endDate:string;
+    createdAt: Date;
 }
 
 export const SimpleListQuestionnaireItem : VFC<QuestionnaireItemProps> = (props) =>{

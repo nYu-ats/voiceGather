@@ -21,7 +21,7 @@ export const CategorizedQuestionnaireContainer: VFC<CategorizedQuestionnaireCont
         {props.data.map((categorized)=>{
             return (
                 <div style={{margin:"1rem", width:"45%"}}>
-                    <h3 style={{borderBottom:"2px solid black"}}>{categorized.category}</h3>
+                    <h3 style={{borderBottom:"2px solid #d9aacd"}}>{categorized.category}</h3>
                     {categorized.data?.map((item, index)=>{
                         return(
                         <SimpleListQuestionnaireItem 

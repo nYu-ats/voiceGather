@@ -1,19 +1,17 @@
 import { VFC, ReactNode } from "react";
-import styled from 'styled-components';
 import { Label } from "../label/Label";
 
-const StyledInput = styled.input`
-margin:auto .25em auto 0;
-`
-
-export type RadioInputProps = {
+export type CheckInputProps = {
+    value: string;
+    checked?: boolean;
     label?:string;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export const CheckInputBox: VFC<RadioInputProps> = (props) => {
+export const CheckInputBox: VFC<CheckInputProps> = (props) => {
     return (
         <div>
-            <StyledInput type="checkbox" />
+            <input style={{margin:"auto .25em auto 0"}} type="checkbox" onChange={props.onChange} value={props.value} checked={props.checked}/>
             {props.label ? <Label label={props.label} style={{fontSize:".75em", fontWeight:"lighter"}}/>: null}
         </div>
 );

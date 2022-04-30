@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { BasePage } from './BasePage';
-import { GetQuestionnare } from '../services/Questionnaire';
 import { QuestionnaireOverview } from "../components/items/questionnaire/BicolorListQuestionnaireItem";
-import { HotQuestionnaireContainer } from '../components/blocks/questionnaire/HotQuestionnaireContainer';
+import { SimpleQuestionnaireContainer } from '../components/blocks/questionnaire/SimpleQuestionnaireContainer';
 import { CategorizedQuestionnaireContainer, CategorizedQuestionnaire } from '../components/blocks/questionnaire/CategorizedQuestionnaireContainer';
-import { FilterBox } from '../components/blocks/filterBox/FilterBox';
 import { formatDate } from '../utils/DateUtil';
-import { TrendKeywordContainer } from '../components/blocks/trend/TrendContainer';
+import { TrendKeywordContainer, TrendKeyword } from '../components/blocks/trend/TrendContainer';
+import { SimpleTemplate } from '../template/SimpleTemplate';
+import { getQuestionnaire, getCategorizedQuestionnaire } from '../features/questionnaire/getQuestionnaire';
+import { getKeyword } from '../features/keyword/getKeyword';
+import { getCategory } from '../features/category/getCategory';
 
 export const Top = () => {
 
@@ -17,111 +18,57 @@ export const Top = () => {
   const [categorizedQuestionnaire, setCatgorized] = useState<Array<CategorizedQuestionnaire>>(
     []
   );
+  const [trends, setTrend] = useState<Array<TrendKeyword>>([]);
 
-  const loadSelectedQuestionnaire = async () => {
-    let response = await GetQuestionnare({
+  const initContents = async () => {
+    const selectedQuestionnaire = await getQuestionnaire({
       order:"desc",
       orderBy:"answer_count",
       startDate:formatDate(today),
       answerable:true,
-      upperLimit:10
+      size:20
     });
-    
-    let questionnaires:Array<QuestionnaireOverview> = response.map((data) => {
-      return ({
-        title: data.title,
-        overview: data.overview,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        category: data.category,
-      });
+    setHot(selectedQuestionnaire);
+
+    const categories = await getCategory({
+      order: 'desc',
+      orderBy: 'count',
+      size: 8
     });
 
-    setHot(questionnaires);
-  }
+    const categorizedQuestionnaire = await getCategorizedQuestionnaire({
+      order:"desc",
+      orderBy:"answer_count",
+      startDate:formatDate(today),
+      answerable:true,
+      size:5,
+    }, categories.map((data) => {return data.name}));
+    setCatgorized(categorizedQuestionnaire);
 
-  const loadCategorizedQuestionnaire = async (category:Array<string>) => {
-    let data = category.map(async (category)=>{
-      let response = await GetQuestionnare({
-        order:"desc",
-        orderBy:"answer_count",
-        startDate:formatDate(today),
-        answerable:true,
-        upperLimit:5,
-        category:[category]
-      });
-
-      let questionnaires : Array<QuestionnaireOverview> = response.map((data) => {
-        return ({
-          title: data.title,
-          overview: data.overview,
-          startDate: data.startDate,
-          endDate: data.endDate,
-          category: data.category,
-        });
-      })  
-
-      console.log(category);
-      return {
-        category: category,
-        data: questionnaires,
-      }
-    });
-
-    let result = await Promise.all(data);
-
-    setCatgorized(result);
-  };
-
-  const loadQuestionnaires = async () => {
-    const selected = loadSelectedQuestionnaire();
-
-    const categories = [
-      "ライフスタイル",
-      "趣味",
-      "アニメ",
-      "その他",
-      "スポーツ",
-      "ファイナンス",
-      "食事",
-      "家電",
-    ];
-
-    const categorized = loadCategorizedQuestionnaire(categories);
-
-    await Promise.all([categorized, selected]);
+    let trend = [];
+    trend.push(await getKeyword({order: 'desc', orderBy:'count', isFastRising:false, size:20}, '人気'))
+    trend.push(await getKeyword({order: 'desc', orderBy:'count', isFastRising:true, size:20}, '急上昇'));
+    trend.push(await getKeyword({order: 'desc', orderBy:'created_at', isFastRising:false, size:20}, '新着'));
+    setTrend(trend);
   }
 
   useEffect(() => {
-    loadQuestionnaires();
+    initContents();
   }, []);
 
     return (
-      <BasePage useFooter={false}>
-        <div style={{
-          backgroundColor:"#eaedf7",
-          width: "95vw",padding:"16px 2.5vw"}}>
-          <div style={{display:"flex", flexWrap:"nowrap", justifyContent:"space-between"}}>
-            <div style={{width: "75vw",marginRight: ".5em"}}>
-              <div style={{width:"100%", backgroundColor:"white", borderRadius: "4px", marginBottom:"1em"}}>
-                <CategorizedQuestionnaireContainer data={categorizedQuestionnaire}/>
-              </div>
-              <div style={{width:"100%", backgroundColor:"#e8ecef", borderRadius: "4px", marginBottom:"1em"}}>
-                <TrendKeywordContainer data={
-                  [
-                    {week: "2022年3月", data:["さばみそ", "おこめ"]},
-                    {week: "2022年4月", data:["さばみそ", "おこめ"]},
-                    {week: "2022年5月", data:["さばみそ", "おこめ"]},
-                  ]
-                } />
-              </div>
-              <div style={{width:"100%", backgroundColor:"white", borderRadius: "4px"}}>
-                <HotQuestionnaireContainer data={hotQuestionnaires} />
-              </div>
+      <SimpleTemplate useFooter={false}>
+          <div style={{width: "75vw",marginRight: ".5em"}}>
+            <div style={{width:"100%", backgroundColor:"white", borderRadius: "4px", marginBottom:"1em"}}>
+              <CategorizedQuestionnaireContainer data={categorizedQuestionnaire}/>
             </div>
-            <FilterBox data={[{name:"サンプル", url:"#"}]}/>
+            <div style={{width:"100%", backgroundColor:"#fafafa", borderRadius: "4px", marginBottom:"1em"}}>
+              <TrendKeywordContainer trend={trends} />
+            </div>
+            <div style={{width:"100%", backgroundColor:"white", borderRadius: "4px"}}>
+              <SimpleQuestionnaireContainer data={hotQuestionnaires} head="今日の注目アンケート"/>
+            </div>
           </div>
-        </div>
-      </BasePage>
+      </SimpleTemplate>
     )
   }

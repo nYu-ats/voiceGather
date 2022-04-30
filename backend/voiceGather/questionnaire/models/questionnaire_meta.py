@@ -25,7 +25,6 @@ class QuestionnaireMeta(AppBaseModel):
     index = models.PositiveIntegerField(
         max_length=2,
         )
-    question_type = models.CharField(
-        max_length=50,
-        default = None,
+    question_type = models.PositiveIntegerField(
+        max_length=2,
         )

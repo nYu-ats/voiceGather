@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from questionnaire.model_proxies.category_mapping_proxy import CategoryMappingProxy
+from questionnaire.models.category_mapping import CategoryMapping
 from questionnaire.serializers.category_serializer import CategorySerializer
 
 class CategoryMappingSerializer(serializers.ModelSerializer):
@@ -8,6 +8,6 @@ class CategoryMappingSerializer(serializers.ModelSerializer):
     '''
     category = CategorySerializer()
     class Meta:
-        model = CategoryMappingProxy
+        model = CategoryMapping
         fields = ('category',)
         depth = 1
