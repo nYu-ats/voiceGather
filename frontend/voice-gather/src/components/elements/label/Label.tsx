@@ -2,9 +2,9 @@ import {VFC, ReactNode} from "react";
 import styled from 'styled-components';
 
 const StyledLabel = styled.label`
-font-weight: bold;
 color: #666;
 line-height:1em;
+font-weight: bold;
 `
 
 export type StyledLabelProps ={
@@ -13,8 +13,8 @@ export type StyledLabelProps ={
 }
 
 type Style = {
-    fontSize?: string;
     fontWeight?: string;
+    fontSize?: string;
 }
 
 export const Label:VFC<StyledLabelProps> = (props) => {

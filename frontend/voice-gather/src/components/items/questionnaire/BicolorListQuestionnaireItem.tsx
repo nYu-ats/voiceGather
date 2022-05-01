@@ -21,7 +21,10 @@ export type QuestionnaireOverview={
     overview:string;
     startDate:string;
     endDate:string;
+    createdAt: Date;
+    answerCount: number;
     category:Array<string>;
+    isDisplay: boolean;
 }
 
 export const BicolorListQuestionnaireItem : VFC<QuestionnaireItemProps> = (props) =>{

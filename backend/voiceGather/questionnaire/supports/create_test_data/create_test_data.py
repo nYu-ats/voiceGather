@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 from typing import final
-from supports.create_test_data.record_wrapper import (
+from questionnaire.supports.create_test_data.record_wrapper import (
     QuestoinnaireWrapper,
     CategoryWrapper,
     CategoryMappingWrapper,

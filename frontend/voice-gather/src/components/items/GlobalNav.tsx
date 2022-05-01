@@ -16,7 +16,7 @@ const navItemStyle = {
 
 const navItemList = [
     {
-        name: '作成',
+        name: '募集',
         link: '#'
     },
     {

@@ -132,7 +132,7 @@ class QuestionnaireMetaWrapper(AbstractRecordWrapper):
             for index in range(question_count):
                 record['questionnaire'] = questionnaire
                 record['index'] = index + 1
-                record['question_type'] = QuestionType(question_type)
+                record['question_type'] = question_type
                 self._target_records.append(self._model_cls(**record))
 
 
@@ -192,7 +192,7 @@ class KeywordHistoryWrapper(AbstractRecordWrapper):
 
     def __init__(self, target_data):
         super().__init__(target_data)
-        self._model_cls = keyword_history.KeywordHisotry
+        self._model_cls = keyword_history.KeywordHistory
 
     def _add_record(self):
         for keyword in self._target_data:
@@ -214,7 +214,7 @@ class CategoryHistoryWrapper(AbstractRecordWrapper):
 
     def __init__(self, target_data, category):
         super().__init__(target_data)
-        self._model_cls = category_history.CategoryHisotry
+        self._model_cls = category_history.CategoryHistory
         self.__category = category
 
     def _add_record(self):

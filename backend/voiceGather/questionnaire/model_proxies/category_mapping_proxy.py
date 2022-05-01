@@ -8,19 +8,8 @@ class CategoryMappingProxy(CategoryMapping):
     class Meta:
         proxy = True
     
-    @classmethod
-    def get_all(cls):
-        return list(cls.objects.all())
-
-    @classmethod
-    def extract_questionnaire_ids(cls, target):
+    def extract_questionnaire_ids(self, target):
         # カテゴリでフィルタリングしたアンケートidのリストを返す
         return [
-            obj.questionnaire_id for obj in list(cls.objects.filter(category__name__in = target))
+            obj.questionnaire_id for obj in list(CategoryMapping.objects.filter(category__name__in = target))
             ]
-
-    @classmethod
-    def get_queryset(cls, target=None):
-        # カテゴリ名でフィルタリングしたQuerySetを返す
-        query_set = CategoryMapping.objects.all()
-        return query_set

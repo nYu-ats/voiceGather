@@ -2,18 +2,22 @@ export type QuestionnaireOverViewRes = {
     id: number;
     title: string;
     overview: string;
-    answeredCount: number;
-    start_at: string;
-    end_at: string;
-    categorymapping_set: Array<CategoryMapping>;
-    created_at: Date;
+    answerCount: number;
+    startAt: string;
+    endAt: string;
+    categories: Array<CategoryRes>;
+    createdAt: Date;
 };
 
-export type CategoryMapping ={
-    category:Category;
-}
-
-export type Category = {
+export type CategoryRes = {
     id:number;
     name:string;
+    count: number | null;
+}
+
+export type KeywordRes = {
+    id:number;
+    keyword:string;
+    count: number | null;
+    fastRising: number | null;
 }
