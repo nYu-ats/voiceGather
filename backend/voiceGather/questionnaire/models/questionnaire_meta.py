@@ -12,7 +12,7 @@ class QuestionnaireMeta(AppBaseModel):
         abstract = False
         constraints = [
             models.UniqueConstraint(
-                fields = ['questionnaire_id', 'index'],
+                fields = ['questionnaire_id', 'index', 'sub_index'],
                 name = 'question_unique'
             ),
         ]
@@ -22,9 +22,8 @@ class QuestionnaireMeta(AppBaseModel):
         on_delete=models.CASCADE,
         max_length=10,
         )
-    index = models.PositiveIntegerField(
-        max_length=2,
+    index = models.PositiveIntegerField()
+    sub_index = models.PositiveIntegerField(
+        null=True,
         )
-    question_type = models.PositiveIntegerField(
-        max_length=2,
-        )
+    question_type = models.PositiveIntegerField()

@@ -1,11 +1,6 @@
-import {VFC, ReactNode} from "react";
+import { VFC } from "react";
 import styled from 'styled-components';
-
-export type BaseIconProps = {
-    color?:string;
-    hoverColor?:string;
-    onClick?: React.MouseEventHandler<HTMLElement>;
-}
+import { BaseIconProps } from "./BaseIcon";
 
 export const StyledSVG = styled.svg<{
     color?:string,

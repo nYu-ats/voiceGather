@@ -1,38 +1,32 @@
+from typing import List
 from questionnaire.models.category import Category
-from questionnaire.models.category_history import CategoryHistory
-from questionnaire.core.dto import CategoryDto
+from questionnaire.core.query_parameter import CategoryListQueryParam
+
 
 class CategoryProxy(Category):
     '''
-    カテゴリデータ操作のサービスクラス
+    カテゴリデータへのアクセスクラス
     '''
     class Meta:
         proxy = True
     
-    def find(self, params):
+    def find(self, params:'CategoryListQueryParam') -> List[Category]:
         # クエリパラメータからquerysetを生成する
         query_set = Category.objects.all()
-        
-        '''並べ替え条件のセット'''
-        # order及びorder_byパラメータはascもしくはdescで必ず取得可能
-        if params.get('orderBy'):
-            # パラメータ指定の仕方もうちょいシンプルに
-            if params.get('orderBy') not in [field.name for field in self._meta.get_fields()]:
-                order_by = '-' + 'categoryhistory__' + params.get('orderBy') \
-                if params.get('order') == 'desc' else 'categoryhistory__' + params.get('orderBy')                
-            else:
-                order_by = '-' + params.get('orderBy') \
-                if params.get('order') == 'desc' else params.get('orderBy')
+
+        if params.order_by:
+            _order_by = params.order_by
+            if params.order_by not in [field.name for field in self._meta.get_fields()]:
+                _order_by = 'categoryhistory__' + _order_by
+
+            order_by = '-' + _order_by if params.order == 'desc' else _order_by
 
             query_set = query_set.order_by(order_by)
 
-        '''取得件数のセット'''
-        if params.get('size'):
-            query_set = query_set[:int(params.get('size'))]        
+        offset = params.offset if params.offset else 0
+        if params.size:
+            query_set = query_set[offset:params.size]
+        else:
+            query_set = query_set[offset:]
 
-        result = []
-        for category in list(query_set):
-            cat_dto = CategoryDto(category.id, category.name, category.categoryhistory.count)
-            result.append(cat_dto)
-
-        return result
+        return list(query_set)

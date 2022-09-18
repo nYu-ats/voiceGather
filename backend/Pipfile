@@ -13,6 +13,9 @@ pyyaml = "*"
 pymysql = "*"
 cryptography = "*"
 django-cors-headers = "*"
+isort = "*"
+autoflake = "*"
+black = "*"
 
 [dev-packages]
 

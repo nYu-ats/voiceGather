@@ -1,74 +1,68 @@
 import axios, { AxiosResponse, AxiosError, Axios } from 'axios';
-import { QuestionnaireOverViewRes, CategoryRes, KeywordRes } from '../../models/ResponseModels';
+import {
+    Questionnaire,
+    QuestionContainer,
+    TextQuestion,
+    SelectQuestion,
+    TextAnswer,
+    SelectAnswer,
+    Category,
+    Keyword
+} from './Schema';
+import {
+    GetQuestionnaireDetailIF,
+    GetQuestionnaireIF,
+    GetCategoryIF,
+    GetKeywordIF,
+    AnswerIF,
+} from './Interface';
 
-export interface QuestionnaireOverviewIF{
-    order?: string;
-    orderBy?: string;
-    keywords?: string[];
-    category?: string[];
-    startDate?: string;
-    endDate?: string;
-    answerable?: boolean;
-    size?: number;
-}
-
-export interface CategoryIF{
-    order?: string;
-    orderBy?: string;
-    size?: number;
-}
-
-export interface KeywordIF{
-    order?: string;
-    orderBy?: string;
-    size?: number;
-    isFastRising? :boolean;
-}
-
-class BaseApi{
+class BaseApi {
     APIROOT = 'http://127.0.0.1:8000/api/v1/gather-voice/';
     client: Axios;
 
-    constructor(){
+    constructor() {
         this.client = axios.create(
             {
-                timeout:5000
+                timeout: 5000
             }
         )
     }
 }
 
-class ApiClient extends BaseApi{
+class ApiClient extends BaseApi {
     private static instance: ApiClient;
 
-    private constructor(){
+    private constructor() {
         super();
-    } 
+    }
 
-    public static getInstance(){
-        if(!this.instance){
+    public static getInstance() {
+        if (!this.instance) {
             this.instance = new ApiClient();
         }
 
         return this.instance;
     }
 
-    async getQuestionnaireOverview(params: QuestionnaireOverviewIF){
-        let result: Array<QuestionnaireOverViewRes> = [];
+    async getQuestionnaire(params: GetQuestionnaireIF) {
+        let result: Array<Questionnaire> = [];
 
         await this.client.get(
             this.APIROOT + 'questionnaire',
-            {params: {
-                order: params.order,
-                orderBy: params.orderBy,
-                startDate: params.startDate,
-                endDate: params.endDate,
-                answerable: params.answerable,
-                size: params.size,
-                category: params.category,
-                keyword: params.keywords,
-            }}
-        ).then((res:AxiosResponse<Array<QuestionnaireOverViewRes>>) => {
+            {
+                params: {
+                    order: params.order,
+                    order_at: params.orderBy,
+                    start_at: params.startDate,
+                    end_at: params.endDate,
+                    is_open: params.answerable,
+                    size: params.size,
+                    category: params.category,
+                    keyword: params.keyword,
+                }
+            }
+        ).then((res: AxiosResponse<Array<Questionnaire>>) => {
             result = res.data;
             return result;
         }).catch((error: AxiosError) => {
@@ -78,17 +72,31 @@ class ApiClient extends BaseApi{
         return result;
     }
 
-    async getCategory(params: CategoryIF){
-        let result: Array<CategoryRes> = [];
+    async getQuestionnaireDetail(id: number) {
+        return await this.client.get(
+            this.APIROOT + 'questionnaire/' + String(id),
+        ).then((res: AxiosResponse<QuestionContainer>) => {
+            const result: QuestionContainer = res.data;
+            return result;
+        }).catch((error: AxiosError) => {
+            console.log(error)
+            throw error;
+        })
+    }
+
+    async getCategory(params: GetCategoryIF) {
+        let result: Array<Category> = [];
 
         await this.client.get(
             this.APIROOT + 'category',
-            {params: {
-                order: params.order,
-                orderBy: params.orderBy,
-                size: params.size,
-            }}
-        ).then((res:AxiosResponse<Array<CategoryRes>>) => {
+            {
+                params: {
+                    order: params.order,
+                    order_by: params.orderBy,
+                    size: params.size,
+                }
+            }
+        ).then((res: AxiosResponse<Array<Category>>) => {
             result = res.data;
             return result;
         }).catch((error: AxiosError) => {
@@ -98,17 +106,19 @@ class ApiClient extends BaseApi{
         return result;
     }
 
-    async getKeyword(params: KeywordIF){
-        let result: Array<KeywordRes> = [];
+    async getKeyword(params: GetKeywordIF) {
+        let result: Array<Keyword> = [];
 
         await this.client.get(
             this.APIROOT + 'keyword',
-            {params: {
-                order: params.order,
-                orderBy: params.orderBy,
-                size: params.size,
-            }}
-        ).then((res:AxiosResponse<Array<KeywordRes>>) => {
+            {
+                params: {
+                    order: params.order,
+                    order_by: params.orderBy,
+                    size: params.size,
+                }
+            }
+        ).then((res: AxiosResponse<Array<Keyword>>) => {
             result = res.data;
             return result;
         }).catch((error: AxiosError) => {
@@ -116,6 +126,26 @@ class ApiClient extends BaseApi{
         })
 
         return result;
+    }
+
+    async getAnswer(params: AnswerIF) {
+        const target = params.questionType === '1' ? 'text_answer' : 'select_answer';
+        return await this.client.get(
+            this.APIROOT + target,
+            {
+                params: {
+                    question_id: params.questionId,
+                    sub_question_types: params.subQuestionType,
+                    summarize: params.summarize
+                }
+            }
+        ).then((res: AxiosResponse<TextAnswer | SelectAnswer>) => {
+            const result: TextAnswer | SelectAnswer = res.data;
+            return result;
+        }).catch((error: AxiosError) => {
+            console.log(error);
+            throw error;
+        })
     }
 }
 

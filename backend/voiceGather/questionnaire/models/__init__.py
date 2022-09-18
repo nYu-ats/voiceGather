@@ -8,3 +8,6 @@ from .questionnaire_meta import QuestionnaireMeta
 from .respondent_history import RespondentHistory
 from .questions.question_free_text import QuestionFreeText
 from .answers.answer_free_text import AnswerFreeText
+from .questions.question_select import QuestionSelect
+from .answers.answer_select import AnswerSelect
+from .selections.selection import Selection

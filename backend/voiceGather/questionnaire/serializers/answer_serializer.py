@@ -8,4 +8,4 @@ class AnswerSerializer(serializers.Serializer):
 
     def get_list(self, params):
         service = AnswerService()
-        return service.get_list(params)
+        return service.get_answers(params).as_dict()

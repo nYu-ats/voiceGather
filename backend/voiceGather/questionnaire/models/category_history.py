@@ -16,6 +16,4 @@ class CategoryHistory(AppBaseModel):
         on_delete=models.CASCADE,
         max_length=10,
     )
-    count = models.PositiveIntegerField(
-        max_length=10,
-    )
+    count = models.PositiveIntegerField()

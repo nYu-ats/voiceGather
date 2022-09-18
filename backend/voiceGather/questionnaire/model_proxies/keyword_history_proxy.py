@@ -1,36 +1,27 @@
+from typing import List
 from questionnaire.models.keyword_history import KeywordHistory
-from questionnaire.core.dto import KeywordDto
+from questionnaire.core.query_parameter import KeywordListQueryParam
+
 
 class KeywordHistoryProxy(KeywordHistory):
     '''
-    キーワードデータ操作のサービスクラス
+    キーワードデータへのアクセスクラス
     '''
+
     class Meta:
         proxy = True
     
-    def find(self, params):
-        # クエリパラメータからquerysetを生成する
+    def find(self, params:'KeywordListQueryParam') ->List[KeywordHistory]:
         query_set = KeywordHistory.objects.all()
-        
-        '''並べ替え条件のセット'''
-        # order及びorder_byパラメータはascもしくはdescで必ず取得可能
-        if params.get('orderBy'):
-            order_by = '-' + params.get('orderBy') \
-            if params.get('order') == 'desc' else params.get('orderBy')
 
+        if params.order_by:
+            order_by = '-' + params.order_by if params.order == 'desc' else params.order_by
             query_set = query_set.order_by(order_by)
 
-        '''取得件数のセット'''
-        if params.get('size'):
-            query_set = query_set[:int(params.get('size'))]        
+        offset = params.offset if params.offset else 0
+        if params.size:
+            query_set = query_set[offset:params.size]
+        else:
+            query_set = query_set[offset:]
 
-        result = []
-        for keyword in list(query_set):
-            keyword_dto = KeywordDto(
-                keyword.id, 
-                keyword.keyword, 
-                keyword.fast_rising, 
-                )
-            result.append(keyword_dto)
-
-        return result
+        return list(query_set)

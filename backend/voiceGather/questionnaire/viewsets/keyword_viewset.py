@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from questionnaire.serializers.keyword_serializer import KeywordSerializer
+from questionnaire.core.query_parameter import KeywordListQueryParam
 
 class KeywordViewSet(viewsets.ViewSet):
     '''
@@ -8,6 +9,6 @@ class KeywordViewSet(viewsets.ViewSet):
     '''
     def list(self, request):
         serializer = KeywordSerializer()
-        return Response(
-            serializer.get_list(self.request.query_params)
-            )
+        parameter = KeywordListQueryParam(request.query_params)
+
+        return Response(serializer.get_list(parameter))

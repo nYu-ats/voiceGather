@@ -1,8 +1,20 @@
-class KeywordService:
+from typing import List
+from questionnaire.model_proxies.keyword_history_proxy import KeywordHistoryProxy
+from questionnaire.core.schema import KeywordSummary
 
-    def __init__(self, model_proxy):
-        self.proxy = model_proxy
+
+class KeywordService:
     
-    def get_list(self, params):
-        dtos = self.proxy.find(params)
-        return [dto.as_dict() for dto in dtos]
+    def get_list(self, params) -> List[KeywordSummary]:
+        keywords = KeywordHistoryProxy().find(params)
+
+        result = []
+        for keyword in keywords:
+            _keyword = KeywordSummary(
+                keyword.id, 
+                keyword.keyword, 
+                keyword.fast_rising, 
+                )
+            result.append(_keyword)
+
+        return result

@@ -1,7 +1,6 @@
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from ..app_base_model import AppBaseModel
-from ..questionnaire import Questionnaire
+
 
 class QuestionFreeText(AppBaseModel):
     '''
@@ -12,19 +11,29 @@ class QuestionFreeText(AppBaseModel):
         abstract = False
         constraints = [
             models.UniqueConstraint(
-                fields = ['questionnaire_id', 'index'],
-                name = 'question_text_unique'
+                fields=['questionnaire_id', 'index', 'is_sub_question'],
+                name='question_text_unique'
             )
         ]
-    
+
     questionnaire = models.ForeignKey(
         'Questionnaire',
         on_delete=models.CASCADE,
         max_length=10,
         )
-    index = models.PositiveIntegerField(
-        max_length=2,
+    index = models.PositiveIntegerField()
+    is_sub_question = models.BooleanField(
+        default=False,
         )
     question = models.CharField(
         max_length=500,
-    )
+        )
+    answer_max_length = models.PositiveIntegerField(
+        default=500,
+        )
+    required = models.BooleanField(
+        default=False,
+        )
+    answer_count = models.PositiveIntegerField(
+        default=1,
+        )

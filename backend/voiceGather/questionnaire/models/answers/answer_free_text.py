@@ -1,7 +1,7 @@
+import uuid
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from ..app_base_model import AppBaseModel
-from ..questions.question_free_text import QuestionFreeText
+
 
 class AnswerFreeText(AppBaseModel):
     '''
@@ -15,7 +15,15 @@ class AnswerFreeText(AppBaseModel):
         'QuestionFreeText',
         on_delete=models.CASCADE,
         max_length=10,
-    )
+        )
     answer = models.CharField(
         max_length=500,
-    )
+        )
+    answer_uuid = models.CharField(
+        max_length=36,
+        default=str(uuid.uuid4()),
+        )
+    parent_answer_uuid = models.CharField(
+        max_length=36,
+        null=True,
+        )

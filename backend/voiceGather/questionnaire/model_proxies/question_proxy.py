@@ -1,29 +1,20 @@
 from questionnaire.models.questions.question_free_text import QuestionFreeText
-from questionnaire.core.dto import QuestionFreeTextDto
-from questionnaire.core.extensions.enums import QuestionType
+from questionnaire.models.questions.question_select import QuestionSelect
 
-class QuestionProxy:
 
-    def collect_questions(self, question_group):
-        for question_type, questionnaire_id in question_group.items():
-            tb_cls, dto_cls = self.__select_cls(question_type)
-            questions = list(
-                tb_cls.objects.filter(questionnaire_id = questionnaire_id))
+class TextQuestionProxy(QuestionFreeText):
 
-            result = []
-            for question in questions:
-                result.append(
-                    dto_cls(
-                        id = question.id,
-                        questionnaireId = questionnaire_id,
-                        index = question.index,
-                        questionType = question_type,
-                        question = question.question
-                    )
-                )
+    class Meta:
+        proxy = True
 
-        return result
+    def find_by(self, questionnaire_id):
+        return list(QuestionFreeText.objects.filter(questionnaire_id = questionnaire_id))
 
-    def __select_cls(self, q_type):
-        if q_type == QuestionType.FREE_TEXT:
-            return QuestionFreeText, QuestionFreeTextDto
+
+class SelectQuestionProxy(QuestionSelect):
+
+    class Meta:
+        proxy = True
+
+    def get_questions(self, questionnaire_id):
+        return list(QuestionSelect.objects.filter(questionnaire_id = questionnaire_id))

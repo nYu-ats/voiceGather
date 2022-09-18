@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from questionnaire.models import KeywordHistory
-from questionnaire.model_proxies.keyword_history_proxy import KeywordHistoryProxy
 from questionnaire.services.keyword_service import KeywordService
 
 class KeywordSerializer(serializers.ModelSerializer):
@@ -11,5 +10,5 @@ class KeywordSerializer(serializers.ModelSerializer):
         model = KeywordHistory
 
     def get_list(self, params):
-        service = KeywordService(KeywordHistoryProxy())
-        return service.get_list(params)
+        service = KeywordService()
+        return [result.as_dict() for result in service.get_list(params)]

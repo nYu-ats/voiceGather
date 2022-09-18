@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from questionnaire.models import Category
-from questionnaire.model_proxies.category_proxy import CategoryProxy
 from questionnaire.services.category_service import CategoryService
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -12,5 +11,5 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
     def get_list(self, params):
-        service = CategoryService(CategoryProxy())
-        return service.get_list(params)
+        service = CategoryService()
+        return [data.as_dict() for data in service.get_list(params)]

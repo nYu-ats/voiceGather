@@ -1,13 +1,15 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from questionnaire.serializers.category_serializer import CategorySerializer
+from questionnaire.core.query_parameter import CategoryListQueryParam
+
 
 class CategoryViewSet(viewsets.ViewSet):
     '''
     カテゴリ取得用
     '''
-    def list(self, rquest):
+    def list(self, request):
         serializer = CategorySerializer()
-        return Response(
-            serializer.get_list(self.request.query_params)
-            ) 
+        parameter = CategoryListQueryParam(request.query_params)
+
+        return Response(serializer.get_list(parameter))

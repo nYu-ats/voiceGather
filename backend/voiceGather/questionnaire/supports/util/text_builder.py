@@ -69,7 +69,6 @@ class TitleBuilder(RandomDecorateTextBuilder):
         self._result = self.random_string(self.pre_text_list) + \
         self._keyword + self.random_string(self.post_text_list)
 
-    
 
 class OverviewBuilder(RandomDecorateTextBuilder):
 
